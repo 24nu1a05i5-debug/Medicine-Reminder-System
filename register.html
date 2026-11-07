@@ -8,46 +8,6 @@
     <title>Register - Medicine Reminder System</title>
 
     <link rel="stylesheet" href="style.css">
-
-    <style>
-        .password-container {
-            position: relative;
-            width: 100%;
-        }
-
-        .password-container input {
-            width: 100%;
-            box-sizing: border-box;
-            padding-right: 45px;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #555;
-            cursor: pointer;
-            padding: 5px;
-            width: auto;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .eye-icon {
-            width: 21px;
-            height: 21px;
-            fill: none;
-            stroke: #555;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-    </style>
 </head>
 
 <body>
@@ -84,7 +44,7 @@
                 required
             >
 
-            <!-- Password Field -->
+            <!-- Password -->
             <div class="password-container">
 
                 <input
@@ -108,7 +68,7 @@
 
             </div>
 
-            <!-- Confirm Password Field -->
+            <!-- Confirm Password -->
             <div class="password-container">
 
                 <input
@@ -141,6 +101,7 @@
 
 <script>
 
+// Show / Hide Password
 function togglePassword(inputId, button) {
 
     const password = document.getElementById(inputId);
@@ -170,7 +131,6 @@ function togglePassword(inputId, button) {
 
         button.setAttribute("aria-label", "Show password");
     }
-
 }
 
 
