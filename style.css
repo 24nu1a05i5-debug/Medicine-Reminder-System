@@ -1,4 +1,9 @@
-/* Reset */
+
+```css
+/* =========================================
+   RESET
+========================================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,13 +11,21 @@
     font-family: Arial, sans-serif;
 }
 
-/* Body */
+
+/* =========================================
+   BODY
+========================================= */
+
 body {
     background-color: #f4f9ff;
     color: #333;
 }
 
-/* Navigation Bar */
+
+/* =========================================
+   NAVIGATION BAR
+========================================= */
+
 .navbar {
     background: #0077cc;
     color: white;
@@ -47,7 +60,11 @@ body {
     color: #ffe082;
 }
 
-/* Hero Section */
+
+/* =========================================
+   HERO SECTION
+========================================= */
+
 .hero {
     text-align: center;
     padding: 100px 20px;
@@ -83,7 +100,11 @@ body {
     border: 2px solid white;
 }
 
-/* Features Section */
+
+/* =========================================
+   FEATURES SECTION
+========================================= */
+
 .features {
     padding: 60px 40px;
     text-align: center;
@@ -120,7 +141,11 @@ body {
     color: #0077cc;
 }
 
-/* Footer */
+
+/* =========================================
+   FOOTER
+========================================= */
+
 footer {
     background: #0077cc;
     color: white;
@@ -128,6 +153,11 @@ footer {
     padding: 20px;
     margin-top: 50px;
 }
+
+
+/* =========================================
+   LOGIN AND REGISTER
+========================================= */
 
 .login-container {
     display: flex;
@@ -192,419 +222,377 @@ footer {
 }
 
 
-.dashboard{
-    padding:50px;
-    text-align:center;
+/* =========================================
+   DASHBOARD
+========================================= */
+
+.dashboard {
+    padding: 50px;
+    text-align: center;
 }
 
-.dashboard h1{
-    color:#0077cc;
-    margin-bottom:10px;
+.dashboard h1 {
+    color: #0077cc;
+    margin-bottom: 10px;
 }
 
-.dashboard p{
-    margin-bottom:30px;
+.dashboard p {
+    margin-bottom: 30px;
 }
 
-.dashboard-cards{
-    display:flex;
-    justify-content:center;
-    gap:30px;
-    flex-wrap:wrap;
-    margin-bottom:30px;
+.dashboard-cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
 }
 
-.dashboard-buttons{
-    margin:30px 0;
+.dashboard-buttons {
+    margin: 30px 0;
 }
 
-.dashboard-buttons .btn{
-    margin:10px;
+.dashboard-buttons .btn {
+    margin: 10px;
 }
 
-.schedule{
-    list-style:none;
-    margin-top:20px;
+.schedule {
+    list-style: none;
+    margin-top: 20px;
 }
 
-.schedule li{
-    background:white;
-    margin:10px auto;
-    padding:15px;
-    width:350px;
-    border-radius:10px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+.schedule li {
+    background: white;
+    margin: 10px auto;
+    padding: 15px;
+    width: 350px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
+
+/* =========================================
+   SELECT AND TEXTAREA
+========================================= */
 
 select,
-textarea{
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:16px;
-    font-family:Arial,sans-serif;
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
 }
 
-textarea{
-    resize:none;
+textarea {
+    resize: none;
 }
 
-.medicine-table{
-    width:90%;
-    margin:30px auto;
-    border-collapse:collapse;
+
+/* =========================================
+   MEDICINE TABLE
+========================================= */
+
+.medicine-table {
+    width: 90%;
+    margin: 30px auto;
+    border-collapse: collapse;
 }
 
 .medicine-table th,
-.medicine-table td{
-    border:1px solid #ddd;
-    padding:15px;
-    text-align:center;
+.medicine-table td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: center;
 }
 
-.medicine-table th{
-    background:#0077cc;
-    color:white;
+.medicine-table th {
+    background: #0077cc;
+    color: white;
 }
 
-.medicine-table tr:nth-child(even){
-    background:#f2f2f2;
+.medicine-table tr:nth-child(even) {
+    background: #f2f2f2;
 }
 
-.profile-img{
-    width:120px;
-    height:120px;
-    border-radius:50%;
-    margin:20px 0;
-    border:4px solid #0077cc;
+
+/* =========================================
+   PROFILE IMAGE
+========================================= */
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 20px 0;
+    border: 4px solid #0077cc;
 }
+
+
+/* =========================================
+   PASSWORD EYE ICON
+========================================= */
+
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-container input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 45px;
+}
+
+/* Eye Button */
+
+.login-box .password-container .toggle-password {
+    position: absolute !important;
+    right: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+
+    width: 30px !important;
+    height: 30px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+
+    border: none !important;
+    border-radius: 50% !important;
+    box-shadow: none !important;
+
+    color: #555 !important;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 2;
+}
+
+/* Remove Blue Hover Background */
+
+.login-box .password-container .toggle-password:hover {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Eye Icon Design */
+
+.eye-icon {
+    width: 20px;
+    height: 20px;
+
+    fill: none;
+    stroke: #555;
+    stroke-width: 2;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
 /* =========================================
    MOBILE-FRIENDLY DESIGN
 ========================================= */
 
 @media (max-width: 768px) {
 
-
-    /* ==============================
-       NAVIGATION
-    ============================== */
+    /* NAVIGATION */
 
     .navbar {
-
         flex-direction: column;
-
         align-items: center;
-
         padding: 15px;
-
         gap: 15px;
-
     }
-
 
     .logo {
-
         font-size: 24px;
-
         text-align: center;
-
     }
-
 
     .nav-links {
-
         display: flex;
-
         flex-wrap: wrap;
-
         justify-content: center;
-
         gap: 8px;
-
         padding: 0;
-
         margin: 0;
-
     }
-
 
     .nav-links li {
-
         margin-left: 0;
-
     }
-
 
     .nav-links a {
-
         font-size: 14px;
-
         padding: 7px 9px;
-
     }
 
 
-
-    /* ==============================
-       HOME / HERO
-    ============================== */
+    /* HOME / HERO */
 
     .hero {
-
         padding: 60px 20px;
-
     }
-
 
     .hero h1 {
-
         font-size: 32px;
-
         margin-bottom: 15px;
-
     }
-
 
     .hero p {
-
         width: 100%;
-
         font-size: 16px;
-
         line-height: 1.5;
-
     }
-
 
     .btn {
-
         font-size: 16px;
-
         padding: 10px 22px;
-
     }
 
 
-
-    /* ==============================
-       FEATURES
-    ============================== */
+    /* FEATURES */
 
     .features {
-
         padding: 40px 20px;
-
     }
-
 
     .features h2 {
-
         font-size: 28px;
-
         margin-bottom: 25px;
-
     }
-
 
     .feature-container {
-
         flex-direction: column;
-
         align-items: center;
-
         gap: 20px;
-
     }
-
 
     .card {
-
         width: 100%;
-
         max-width: 350px;
-
         padding: 25px;
-
     }
 
 
-
-    /* ==============================
-       LOGIN / REGISTER / ADD MEDICINE
-    ============================== */
+    /* LOGIN / REGISTER / ADD MEDICINE */
 
     .login-container {
-
         min-height: calc(100vh - 70px);
-
         height: auto;
-
         width: 100%;
-
         padding: 30px 15px;
-
         box-sizing: border-box;
-
     }
-
 
     .login-box {
-
         width: 100%;
-
         max-width: 400px;
-
         padding: 25px 20px;
-
         box-sizing: border-box;
-
     }
-
 
     .login-box input,
     .login-box select,
     .login-box textarea {
-
         width: 100%;
-
         box-sizing: border-box;
+    }
 
+    /* Keep Eye Icon Small on Mobile */
+
+    .login-box .password-container .toggle-password {
+        width: 30px !important;
+        height: 30px !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
 
-
-    /* ==============================
-       DASHBOARD
-    ============================== */
+    /* DASHBOARD */
 
     .dashboard {
-
         width: 92%;
-
         padding: 30px 0;
-
         margin: auto;
-
     }
-
 
     .dashboard h1 {
-
         font-size: 26px;
-
     }
-
 
     .dashboard > p {
-
         font-size: 15px;
-
         line-height: 1.5;
-
     }
-
 
     .dashboard-cards {
-
         flex-direction: column;
-
         gap: 15px;
-
     }
-
 
     .dashboard .card {
-
         width: 100%;
-
         max-width: none;
-
     }
-
 
     .dashboard-buttons {
-
         display: flex;
-
         flex-direction: column;
-
         gap: 10px;
-
         margin: 25px 0;
-
     }
-
 
     .dashboard-buttons .btn {
-
         width: 100%;
-
         margin: 0;
-
         text-align: center;
-
         box-sizing: border-box;
-
     }
-
 
     .schedule {
-
         padding: 0;
-
     }
-
 
     .schedule li {
-
         width: 100%;
-
         box-sizing: border-box;
-
     }
 
 
-
-    /* ==============================
-       GENERAL BUTTONS
-    ============================== */
+    /* GENERAL BUTTONS */
 
     button {
-
         max-width: 100%;
-
     }
 
 
-
-    /* ==============================
-       PROFILE IMAGE
-    ============================== */
+    /* PROFILE IMAGE */
 
     .profile-img {
-
         width: 100px;
-
         height: 100px;
-
     }
 
 
-
-    /* ==============================
-       FOOTER
-    ============================== */
+    /* FOOTER */
 
     footer {
-
         padding: 15px;
-
         font-size: 14px;
-
     }
 
 }
-
+```
