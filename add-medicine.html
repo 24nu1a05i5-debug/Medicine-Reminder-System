@@ -1,55 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Add Medicine - Medicine Reminder System</title>
+
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <header>
+
     <nav class="navbar">
+
         <h2 class="logo">💊 MediReminder</h2>
+
         <ul class="nav-links">
+
             <li><a href="dashboard.html">Dashboard</a></li>
             <li><a href="add-medicine.html">Add Medicine</a></li>
             <li><a href="medicine.html">Medicines</a></li>
             <li><a href="profile.html">Profile</a></li>
+
         </ul>
+
     </nav>
+
 </header>
 
 <div class="login-container">
+
     <div class="login-box">
 
         <h2 id="formTitle">Add Medicine</h2>
 
         <form id="medicineForm">
 
-            <input type="text" id="medicineName"
-                   placeholder="Medicine Name" required>
+            <input
+                type="text"
+                id="medicineName"
+                placeholder="Medicine Name"
+                required
+            >
 
-            <input type="text" id="dosage"
-                   placeholder="Dosage (e.g. 500 mg)" required>
+            <input
+                type="text"
+                id="dosage"
+                placeholder="Dosage (e.g. 500 mg)"
+                required
+            >
 
-            <input type="date" id="startDate" required>
+            <input
+                type="date"
+                id="startDate"
+                required
+            >
 
-            <input type="date" id="endDate" required>
+            <input
+                type="date"
+                id="endDate"
+                required
+            >
 
-            <input type="time" id="medicineTime" required>
+            <input
+                type="time"
+                id="medicineTime"
+                required
+            >
 
             <select id="frequency" required>
+
                 <option value="">Select Frequency</option>
                 <option value="Once a Day">Once a Day</option>
                 <option value="Twice a Day">Twice a Day</option>
                 <option value="Three Times a Day">Three Times a Day</option>
+
             </select>
 
-            <textarea id="notes"
-                      placeholder="Notes (Optional)"
-                      rows="4"></textarea>
+            <textarea
+                id="notes"
+                placeholder="Notes (Optional)"
+                rows="4"
+            ></textarea>
 
             <button type="submit" id="saveButton">
                 Save Medicine
@@ -58,43 +95,84 @@
         </form>
 
     </div>
+
 </div>
 
 <script>
 
-// Get Edit Index
-const urlParams = new URLSearchParams(window.location.search);
-const editIndex = urlParams.get("edit");
+// =====================================
+// CHECK LOGIN
+// =====================================
 
-// Load Medicines
-let medicines = JSON.parse(localStorage.getItem("medicines")) || [];
+const currentUser = localStorage.getItem("currentUser");
 
-// Get today's date in YYYY-MM-DD format
+if (localStorage.getItem("loggedIn") !== "true" || !currentUser) {
+
+    alert("Please login first.");
+    window.location.href = "login.html";
+
+}
+
+// =====================================
+// USER-SPECIFIC STORAGE KEY
+// =====================================
+
+const medicineKey = "medicines_" + currentUser;
+
+// Load only the current user's medicines
+let medicines = JSON.parse(localStorage.getItem(medicineKey)) || [];
+
+// =====================================
+// GET TODAY'S DATE
+// =====================================
+
 function getTodayDate() {
+
     const today = new Date();
+
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, "0");
     const day = String(today.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
+
 }
 
-// Set minimum date
 const todayDate = getTodayDate();
 
-document.getElementById("startDate").min = todayDate;
-document.getElementById("endDate").min = todayDate;
+const startDateInput = document.getElementById("startDate");
+const endDateInput = document.getElementById("endDate");
 
-// Edit Mode
+startDateInput.min = todayDate;
+endDateInput.min = todayDate;
+
+// =====================================
+// GET EDIT INDEX
+// =====================================
+
+const urlParams = new URLSearchParams(window.location.search);
+
+const editIndex = urlParams.get("edit");
+
+// =====================================
+// EDIT MODE
+// =====================================
+
 if (editIndex !== null) {
 
-    const index = parseInt(editIndex);
+    const index = Number(editIndex);
 
-    if (Number.isInteger(index) && medicines[index]) {
+    if (!Number.isInteger(index) || !medicines[index]) {
+
+        alert("Invalid medicine record.");
+        window.location.href = "medicine.html";
+
+    } else {
 
         const medicine = medicines[index];
 
         document.getElementById("formTitle").textContent = "✏️ Edit Medicine";
+
         document.getElementById("saveButton").textContent = "Update Medicine";
 
         document.getElementById("medicineName").value = medicine.name;
@@ -105,64 +183,91 @@ if (editIndex !== null) {
         document.getElementById("frequency").value = medicine.frequency;
         document.getElementById("notes").value = medicine.notes || "";
 
-    } else {
-        alert("Invalid medicine record.");
-        window.location.href = "medicine.html";
+        endDateInput.min = medicine.startDate > todayDate
+            ? medicine.startDate
+            : todayDate;
+
     }
+
 }
 
-// Update minimum end date when start date changes
-document.getElementById("startDate").addEventListener("change", function() {
+// =====================================
+// DATE VALIDATION
+// =====================================
+
+startDateInput.addEventListener("change", function() {
 
     const startDate = this.value;
-    const endDateInput = document.getElementById("endDate");
 
-    endDateInput.min = startDate > todayDate ? startDate : todayDate;
+    endDateInput.min = startDate > todayDate
+        ? startDate
+        : todayDate;
 
     if (endDateInput.value && endDateInput.value < endDateInput.min) {
+
         endDateInput.value = "";
+
     }
+
 });
 
-// Form Submit
+// =====================================
+// FORM SUBMISSION
+// =====================================
+
 document.getElementById("medicineForm").addEventListener("submit", function(event) {
 
     event.preventDefault();
 
     const name = document.getElementById("medicineName").value.trim();
+
     const dosage = document.getElementById("dosage").value.trim();
-    const startDate = document.getElementById("startDate").value;
-    const endDate = document.getElementById("endDate").value;
+
+    const startDate = startDateInput.value;
+
+    const endDate = endDateInput.value;
+
     const time = document.getElementById("medicineTime").value;
+
     const frequency = document.getElementById("frequency").value;
+
     const notes = document.getElementById("notes").value.trim();
 
     // Validate medicine name
     if (!name) {
-        alert("Invalid Medicine Name!");
+
+        alert("Please enter the medicine name.");
         return;
+
     }
 
     // Validate dosage
     if (!dosage) {
+
         alert("Please enter the dosage.");
         return;
+
     }
 
-    // Validate previous dates
+    // Validate dates
     if (startDate < todayDate || endDate < todayDate) {
+
         alert("Invalid Date! Please select today's date or a future date.");
         return;
+
     }
 
-    // Validate start and end dates
+    // End date validation
     if (endDate < startDate) {
+
         alert("Invalid Date! End date cannot be before start date.");
         return;
+
     }
 
     // Create medicine object
     const medicine = {
+
         name: name,
         dosage: dosage,
         startDate: startDate,
@@ -170,32 +275,44 @@ document.getElementById("medicineForm").addEventListener("submit", function(even
         time: time,
         frequency: frequency,
         notes: notes
+
     };
 
-    // Update Existing Medicine
+    // =====================================
+    // UPDATE EXISTING MEDICINE
+    // =====================================
+
     if (editIndex !== null) {
 
-        const index = parseInt(editIndex);
+        const index = Number(editIndex);
 
         if (!Number.isInteger(index) || !medicines[index]) {
+
             alert("Invalid medicine record.");
             return;
+
         }
 
         medicines[index] = medicine;
 
-        localStorage.setItem("medicines", JSON.stringify(medicines));
+        localStorage.setItem(medicineKey, JSON.stringify(medicines));
 
         alert("Medicine updated successfully!");
 
-    } else {
+    }
 
-        // Add New Medicine
+    // =====================================
+    // ADD NEW MEDICINE
+    // =====================================
+
+    else {
+
         medicines.push(medicine);
 
-        localStorage.setItem("medicines", JSON.stringify(medicines));
+        localStorage.setItem(medicineKey, JSON.stringify(medicines));
 
         alert("Medicine saved successfully!");
+
     }
 
     window.location.href = "medicine.html";
@@ -206,4 +323,3 @@ document.getElementById("medicineForm").addEventListener("submit", function(even
 
 </body>
 </html>
-
