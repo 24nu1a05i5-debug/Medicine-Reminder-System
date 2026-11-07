@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +10,6 @@
 <body>
 
 <div class="login-container">
-
     <div class="login-box">
 
         <h2>💊 MediReminder</h2>
@@ -17,36 +17,63 @@
 
         <form id="registerForm">
 
-    <input type="text" id="fullName" placeholder="Full Name" required>
+            <input type="text" id="fullName" placeholder="Full Name" required>
 
-    <input type="email" id="email" placeholder="Email Address" required>
+            <input type="email" id="email" placeholder="Email Address" required>
 
-    <input type="tel" id="phone" placeholder="Phone Number" required>
+            <input type="tel" id="phone" placeholder="Phone Number"
+                   maxlength="10" pattern="[0-9]{10}"
+                   title="Enter exactly 10 digits" required>
 
-    <input type="password" id="password" placeholder="Password" required>
+            <input type="password" id="password" placeholder="Password" required>
 
-    <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
 
-    <button type="submit">Register</button>
+            <button type="submit">Register</button>
 
-</form>
+        </form>
 
-        <script>
+    </div>
+</div>
+
+<script>
 document.getElementById("registerForm").addEventListener("submit", function(event) {
 
     event.preventDefault();
 
-    const name = document.getElementById("fullName").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
+    const name = document.getElementById("fullName").value.trim();
+    const email = document.getElementById("email").value.trim().toLowerCase();
+    const phone = document.getElementById("phone").value.trim();
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
 
+    // Name Validation
+    if (!/^[A-Za-z ]+$/.test(name)) {
+        alert("Invalid Name! Please enter letters only.");
+        return;
+    }
+
+    // Phone Number Validation
+    if (!/^[0-9]{10}$/.test(phone)) {
+        alert("Invalid Phone Number! Enter exactly 10 digits.");
+        return;
+    }
+
+    // Strong Password Validation
+    const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%&*])[A-Za-z\d@#$!%&*]{8,}$/;
+
+    if (!strongPassword.test(password)) {
+        alert("Weak Password! Use at least 8 characters with uppercase, lowercase, number and special character.");
+        return;
+    }
+
+    // Confirm Password Validation
     if (password !== confirmPassword) {
         alert("Passwords do not match!");
         return;
     }
 
+    // Save User Details
     const user = {
         name: name,
         email: email,
@@ -56,10 +83,12 @@ document.getElementById("registerForm").addEventListener("submit", function(even
 
     localStorage.setItem("user", JSON.stringify(user));
 
-    alert("Registration successful!");
+    alert("Registration Successful! Your account is valid.");
 
     window.location.href = "login.html";
+
 });
 </script>
+
 </body>
 </html>
