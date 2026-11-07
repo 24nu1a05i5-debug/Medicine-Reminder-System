@@ -1,4 +1,3 @@
-
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +18,7 @@
         .password-container input {
             width: 100%;
             box-sizing: border-box;
-            padding-right: 65px;
+            padding-right: 45px;
         }
 
         .toggle-password {
@@ -30,11 +29,23 @@
             background: none;
             border: none;
             color: #555;
-            font-size: 13px;
             cursor: pointer;
             padding: 5px;
             width: auto;
             margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .eye-icon {
+            width: 21px;
+            height: 21px;
+            fill: none;
+            stroke: #555;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
     </style>
 </head>
@@ -73,6 +84,7 @@
                 required
             >
 
+            <!-- Password Field -->
             <div class="password-container">
 
                 <input
@@ -86,10 +98,17 @@
                     type="button"
                     class="toggle-password"
                     onclick="togglePassword('password', this)"
-                >Show</button>
+                    aria-label="Show password"
+                >
+                    <svg class="eye-icon" viewBox="0 0 24 24">
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
 
             </div>
 
+            <!-- Confirm Password Field -->
             <div class="password-container">
 
                 <input
@@ -103,7 +122,13 @@
                     type="button"
                     class="toggle-password"
                     onclick="togglePassword('confirmPassword', this)"
-                >Show</button>
+                    aria-label="Show confirm password"
+                >
+                    <svg class="eye-icon" viewBox="0 0 24 24">
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
 
             </div>
 
@@ -121,15 +146,35 @@ function togglePassword(inputId, button) {
     const password = document.getElementById(inputId);
 
     if (password.type === "password") {
+
         password.type = "text";
-        button.textContent = "Hide";
+
+        button.innerHTML = `
+            <svg class="eye-icon" viewBox="0 0 24 24">
+                <path d="M3 3l18 18"/>
+                <path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a15 15 0 0 1-3 3.8"/>
+                <path d="M6.2 6.2C3.5 8 2 12 2 12s3.5 7 10 7c1.5 0 2.8-.4 4-1"/>
+            </svg>`;
+
+        button.setAttribute("aria-label", "Hide password");
+
     } else {
+
         password.type = "password";
-        button.textContent = "Show";
+
+        button.innerHTML = `
+            <svg class="eye-icon" viewBox="0 0 24 24">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+            </svg>`;
+
+        button.setAttribute("aria-label", "Show password");
     }
 
 }
 
+
+// Registration Form
 document.getElementById("registerForm").addEventListener("submit", function(event) {
 
     event.preventDefault();
@@ -140,17 +185,20 @@ document.getElementById("registerForm").addEventListener("submit", function(even
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
 
+
     // Name Validation
     if (!/^[A-Za-z ]+$/.test(name)) {
         alert("Invalid Name! Please enter letters only.");
         return;
     }
 
+
     // Phone Number Validation
     if (!/^[0-9]{10}$/.test(phone)) {
         alert("Invalid Phone Number! Enter exactly 10 digits.");
         return;
     }
+
 
     // Strong Password Validation
     const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%&*])[A-Za-z\d@#$!%&*]{8,}$/;
@@ -160,11 +208,13 @@ document.getElementById("registerForm").addEventListener("submit", function(even
         return;
     }
 
+
     // Confirm Password Validation
     if (password !== confirmPassword) {
         alert("Passwords do not match!");
         return;
     }
+
 
     // Load Existing Users
     let users = [];
@@ -174,6 +224,7 @@ document.getElementById("registerForm").addEventListener("submit", function(even
     } catch (error) {
         users = [];
     }
+
 
     // Migrate Previous Account
     const oldUser = localStorage.getItem("user");
@@ -192,10 +243,12 @@ document.getElementById("registerForm").addEventListener("submit", function(even
                     users.push(previousUser);
                 }
             }
+
         } catch (error) {
             console.log("Previous user data could not be read.");
         }
     }
+
 
     // Check Duplicate Email
     const emailExists = users.some(function(u) {
@@ -207,6 +260,7 @@ document.getElementById("registerForm").addEventListener("submit", function(even
         return;
     }
 
+
     // Create New User
     const user = {
         name: name,
@@ -214,6 +268,7 @@ document.getElementById("registerForm").addEventListener("submit", function(even
         phone: phone,
         password: password
     };
+
 
     // Save Users
     users.push(user);
