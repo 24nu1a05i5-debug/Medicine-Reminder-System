@@ -1,8 +1,7 @@
 
-   
-   <!DOCTYPE html>
+```html
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,13 +14,12 @@
         .password-container {
             position: relative;
             width: 100%;
-            margin-bottom: 15px;
         }
 
         .password-container input {
             width: 100%;
             box-sizing: border-box;
-            padding-right: 45px;
+            padding-right: 65px;
         }
 
         .toggle-password {
@@ -29,14 +27,14 @@
             right: 12px;
             top: 50%;
             transform: translateY(-50%);
+            background: none;
             border: none;
-            background: transparent;
+            color: #555;
+            font-size: 13px;
             cursor: pointer;
-            font-size: 20px;
             padding: 5px;
             width: auto;
             margin: 0;
-            color: #333;
         }
     </style>
 </head>
@@ -44,10 +42,9 @@
 <body>
 
 <div class="login-container">
-
     <div class="login-box">
 
-        <h2>💊 MediReminder</h2>
+        <h2>MediReminder</h2>
         <p>Create Your Account</p>
 
         <form id="registerForm">
@@ -76,8 +73,6 @@
                 required
             >
 
-            <!-- Password Field -->
-
             <div class="password-container">
 
                 <input
@@ -90,15 +85,10 @@
                 <button
                     type="button"
                     class="toggle-password"
-                    aria-label="Show password"
                     onclick="togglePassword('password', this)"
-                >
-                    👁️
-                </button>
+                >Show</button>
 
             </div>
-
-            <!-- Confirm Password Field -->
 
             <div class="password-container">
 
@@ -112,11 +102,8 @@
                 <button
                     type="button"
                     class="toggle-password"
-                    aria-label="Show confirm password"
                     onclick="togglePassword('confirmPassword', this)"
-                >
-                    👁️
-                </button>
+                >Show</button>
 
             </div>
 
@@ -125,188 +112,113 @@
         </form>
 
     </div>
-
 </div>
 
-
 <script>
-
-/* =========================================
-   SHOW / HIDE PASSWORD
-========================================= */
 
 function togglePassword(inputId, button) {
 
     const password = document.getElementById(inputId);
 
     if (password.type === "password") {
-
         password.type = "text";
-        button.textContent = "🙈";
-        button.setAttribute("aria-label", "Hide password");
-
+        button.textContent = "Hide";
     } else {
-
         password.type = "password";
-        button.textContent = "👁️";
-        button.setAttribute("aria-label", "Show password");
-
+        button.textContent = "Show";
     }
 
 }
-
-
-/* =========================================
-   REGISTRATION VALIDATION
-========================================= */
 
 document.getElementById("registerForm").addEventListener("submit", function(event) {
 
     event.preventDefault();
 
     const name = document.getElementById("fullName").value.trim();
-
     const email = document.getElementById("email").value.trim().toLowerCase();
-
     const phone = document.getElementById("phone").value.trim();
-
     const password = document.getElementById("password").value;
-
     const confirmPassword = document.getElementById("confirmPassword").value;
 
-
-    /* Name Validation */
-
+    // Name Validation
     if (!/^[A-Za-z ]+$/.test(name)) {
-
         alert("Invalid Name! Please enter letters only.");
         return;
-
     }
 
-
-    /* Phone Number Validation */
-
+    // Phone Number Validation
     if (!/^[0-9]{10}$/.test(phone)) {
-
         alert("Invalid Phone Number! Enter exactly 10 digits.");
         return;
-
     }
 
-
-    /* Strong Password Validation */
-
-    const strongPassword =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%&*])[A-Za-z\d@#$!%&*]{8,}$/;
+    // Strong Password Validation
+    const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%&*])[A-Za-z\d@#$!%&*]{8,}$/;
 
     if (!strongPassword.test(password)) {
-
         alert("Weak Password! Use at least 8 characters with uppercase, lowercase, number and special character.");
-
         return;
-
     }
 
-
-    /* Confirm Password Validation */
-
+    // Confirm Password Validation
     if (password !== confirmPassword) {
-
         alert("Passwords do not match!");
         return;
-
     }
 
-
-    /* =========================================
-       MULTIPLE USER ACCOUNT STORAGE
-    ========================================= */
-
+    // Load Existing Users
     let users = [];
 
     try {
-
         users = JSON.parse(localStorage.getItem("users")) || [];
-
     } catch (error) {
-
         users = [];
-
     }
 
-
-    /* Migrate Previous Single User Account */
-
+    // Migrate Previous Account
     const oldUser = localStorage.getItem("user");
 
     if (oldUser) {
-
         try {
-
             const previousUser = JSON.parse(oldUser);
 
             if (previousUser.email) {
 
-                const oldUserExists = users.some(function(u) {
-
-                    return u.email.toLowerCase() ===
-                           previousUser.email.toLowerCase();
-
+                const exists = users.some(function(u) {
+                    return u.email.toLowerCase() === previousUser.email.toLowerCase();
                 });
 
-                if (!oldUserExists) {
-
+                if (!exists) {
                     users.push(previousUser);
-
                 }
-
             }
-
         } catch (error) {
-
             console.log("Previous user data could not be read.");
-
         }
-
     }
 
-
-    /* Check Duplicate Email */
-
+    // Check Duplicate Email
     const emailExists = users.some(function(u) {
-
         return u.email.toLowerCase() === email;
-
     });
 
     if (emailExists) {
-
         alert("This email is already registered! Please use another email.");
-
         return;
-
     }
 
-
-    /* Create New User */
-
+    // Create New User
     const user = {
-
         name: name,
         email: email,
         phone: phone,
         password: password
-
     };
 
-
-    /* Save All Users */
-
+    // Save Users
     users.push(user);
 
     localStorage.setItem("users", JSON.stringify(users));
-
 
     alert("Registration Successful! Your account has been created.");
 
@@ -318,3 +230,4 @@ document.getElementById("registerForm").addEventListener("submit", function(even
 
 </body>
 </html>
+```
