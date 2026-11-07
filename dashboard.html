@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Medicine Reminder System</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <nav class="navbar">
+
+        <h2 class="logo">
+            💊 MediReminder
+        </h2>
+
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="add-medicine.html">
+                    Add Medicine
+                </a>
+            </li>
+
+            <li>
+                <a href="medicine.html">
+                    Medicines
+                </a>
+            </li>
+
+            <li>
+                <a href="profile.html">
+                    Profile
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+</header>
+
+
+
+<section class="dashboard">
+
+
+    <!-- Welcome -->
+
+    <h1>
+
+        Welcome,
+        <span id="userName">
+            User
+        </span>
+       ! 👋
+
+    </h1>
+
+
+    <p>
+        Manage your medicines and stay healthy.
+    </p>
+
+
+
+    <!-- Dashboard Cards -->
+
+    <div class="dashboard-cards">
+
+
+        <div class="card">
+
+            <h2>
+                💊 Today's Medicines
+            </h2>
+
+            <p>
+
+                <span id="medicineCount">
+                    0
+                </span>
+
+                Medicines Scheduled
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <h2>
+                ⏰ Next Reminder
+            </h2>
+
+            <p id="nextReminder">
+
+                No medicines scheduled
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- Dashboard Buttons -->
+
+    <div class="dashboard-buttons">
+
+
+        <a href="add-medicine.html"
+           class="btn">
+
+            ➕ Add Medicine
+
+        </a>
+
+
+        <a href="medicine.html"
+           class="btn">
+
+            📋 View Medicines
+
+        </a>
+
+
+    </div>
+
+
+
+    <!-- Enable Notifications -->
+
+    <button id="enableNotifications">
+
+        🔔 Enable Notifications
+
+    </button>
+
+
+
+    <!-- Test Notification -->
+
+    <button id="testNotification">
+
+        🧪 Test Browser Notification
+
+    </button>
+
+
+
+    <!-- Reminder Box -->
+
+    <div id="reminderBox"
+         style="
+         display:none;
+         padding:20px;
+         margin:20px 0;
+         border-radius:12px;
+         background:#e8f5e9;
+         text-align:center;
+         ">
+
+
+        <h2>
+            🔔 Medicine Reminder
+        </h2>
+
+
+        <p id="reminderMessage">
+        </p>
+
+
+        <button id="takenButton">
+
+            Taken ✓
+
+        </button>
+
+
+    </div>
+
+
+
+    <!-- Today's Schedule -->
+
+    <h2>
+        Today's Schedule
+    </h2>
+
+
+    <ul class="schedule"
+        id="todaySchedule">
+
+
+        <li>
+
+            No medicines scheduled for today.
+
+        </li>
+
+
+    </ul>
+
+
+</section>
+
+
+
+
+<script>
+
+
+/* =========================================
+   USER INFORMATION
+========================================= */
+
+
+const savedUser =
+    localStorage.getItem("user");
+
+
+if (savedUser) {
+
+    const user =
+        JSON.parse(savedUser);
+
+
+    document.getElementById(
+        "userName"
+    ).textContent =
+        user.name;
+
+}
+
+
+
+
+/* =========================================
+   LOAD MEDICINES
+========================================= */
+
+
+const medicines =
+    JSON.parse(
+        localStorage.getItem("medicines")
+    ) || [];
+
+
+
+
+/* =========================================
+   TODAY'S DATE
+========================================= */
+
+
+function getToday() {
+
+    const date =
+        new Date();
+
+
+    return (
+
+        date.getFullYear() +
+
+        "-" +
+
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0") +
+
+        "-" +
+
+        String(
+            date.getDate()
+        ).padStart(2, "0")
+
+    );
+
+}
+
+
+
+
+/* =========================================
+   TODAY'S MEDICINES
+========================================= */
+
+
+const today =
+    getToday();
+
+
+const todaysMedicines =
+    medicines.filter(
+        function(medicine) {
+
+            return (
+
+                today >= medicine.startDate &&
+
+                today <= medicine.endDate
+
+            );
+
+        }
+    );
+
+
+
+
+/* =========================================
+   MEDICINE COUNT
+========================================= */
+
+
+document.getElementById(
+    "medicineCount"
+).textContent =
+    todaysMedicines.length;
+
+
+
+
+/* =========================================
+   TODAY'S SCHEDULE
+========================================= */
+
+
+const schedule =
+    document.getElementById(
+        "todaySchedule"
+    );
+
+
+if (todaysMedicines.length > 0) {
+
+    schedule.innerHTML = "";
+
+
+    todaysMedicines.forEach(
+        function(medicine) {
+
+
+            const li =
+                document.createElement(
+                    "li"
+                );
+
+
+            li.textContent =
+
+                "💊 " +
+
+                medicine.name +
+
+                " - " +
+
+                medicine.time;
+
+
+            schedule.appendChild(li);
+
+
+        }
+    );
+
+}
+
+
+
+
+/* =========================================
+   NEXT REMINDER
+========================================= */
+
+
+function updateNextReminder() {
+
+
+    const now =
+        new Date();
+
+
+    const currentTime =
+
+        String(
+            now.getHours()
+        ).padStart(2, "0") +
+
+        ":" +
+
+        String(
+            now.getMinutes()
+        ).padStart(2, "0");
+
+
+
+    const currentMedicines =
+        JSON.parse(
+            localStorage.getItem(
+                "medicines"
+            )
+        ) || [];
+
+
+
+    const activeMedicines =
+        currentMedicines.filter(
+            function(medicine) {
+
+
+                const today =
+                    getToday();
+
+
+                return (
+
+                    today >=
+                    medicine.startDate &&
+
+                    today <=
+                    medicine.endDate
+
+                );
+
+
+            }
+        );
+
+
+
+    const upcoming =
+        activeMedicines.filter(
+            function(medicine) {
+
+                return (
+                    medicine.time >
+                    currentTime
+                );
+
+            }
+        );
+
+
+
+    const nextReminder =
+        document.getElementById(
+            "nextReminder"
+        );
+
+
+
+    if (upcoming.length > 0) {
+
+
+        upcoming.sort(
+            function(a, b) {
+
+                return a.time.localeCompare(
+                    b.time
+                );
+
+            }
+        );
+
+
+        nextReminder.textContent =
+
+            upcoming[0].name +
+
+            " - " +
+
+            upcoming[0].time;
+
+
+    }
+
+    else {
+
+
+        nextReminder.textContent =
+            "No more medicines today.";
+
+
+    }
+
+}
+
+
+
+
+updateNextReminder();
+
+
+
+
+/* =========================================
+   AUDIO VARIABLES
+========================================= */
+
+
+let audioContext = null;
+
+let soundInterval = null;
+
+
+
+
+/* =========================================
+   START REMINDER SOUND
+========================================= */
+
+
+function startReminderSound() {
+
+
+    /* Create Audio Context */
+
+    if (!audioContext) {
+
+        audioContext =
+
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+    }
+
+
+
+    /* Resume Audio */
+
+    if (
+        audioContext.state ===
+        "suspended"
+    ) {
+
+        audioContext.resume();
+
+    }
+
+
+
+    /* Stop previous sound */
+
+    stopReminderSound();
+
+
+
+    /* Beep function */
+
+    function beep() {
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+
+        const gainNode =
+            audioContext.createGain();
+
+
+
+        oscillator.connect(
+            gainNode
+        );
+
+
+        gainNode.connect(
+            audioContext.destination
+        );
+
+
+
+        /* Beep frequency */
+
+        oscillator.frequency.value =
+            800;
+
+
+
+        /* Volume */
+
+        gainNode.gain.value =
+            0.3;
+
+
+
+        /* Start */
+
+        oscillator.start();
+
+
+
+        /* Stop individual beep after 400ms */
+
+        setTimeout(
+            function() {
+
+                oscillator.stop();
+
+            },
+            400
+        );
+
+
+    }
+
+
+
+    /* First beep */
+
+    beep();
+
+
+
+    /* Repeat every 2 seconds */
+
+    soundInterval =
+
+        setInterval(
+            function() {
+
+                beep();
+
+            },
+            2000
+        );
+
+
+}
+
+
+
+
+/* =========================================
+   STOP REMINDER SOUND
+========================================= */
+
+
+function stopReminderSound() {
+
+
+    if (soundInterval) {
+
+
+        clearInterval(
+            soundInterval
+        );
+
+
+        soundInterval =
+            null;
+
+
+    }
+
+}
+
+
+
+
+/* =========================================
+   ENABLE NOTIFICATIONS
+========================================= */
+
+
+document.getElementById(
+    "enableNotifications"
+).addEventListener(
+    "click",
+    async function() {
+
+
+        if (
+            !(
+                "Notification"
+                in window
+            )
+        ) {
+
+
+            alert(
+                "This browser does not support notifications."
+            );
+
+
+            return;
+
+        }
+
+
+
+        try {
+
+
+            const permission =
+                await Notification.requestPermission();
+
+
+
+            if (
+                permission ===
+                "granted"
+            ) {
+
+
+                alert(
+                    "🔔 Notifications enabled successfully!"
+                );
+
+
+            }
+
+            else if (
+                permission ===
+                "denied"
+            ) {
+
+
+                alert(
+                    "Notifications are blocked. Please allow them in browser settings."
+                );
+
+
+            }
+
+            else {
+
+
+                alert(
+                    "Notification permission was not given."
+                );
+
+
+            }
+
+
+        }
+
+        catch (error) {
+
+
+            console.log(
+                "Notification permission error:",
+                error
+            );
+
+
+        }
+
+
+    }
+);
+
+
+
+
+/* =========================================
+   TEST BROWSER NOTIFICATION
+========================================= */
+
+
+document.getElementById(
+    "testNotification"
+).addEventListener(
+    "click",
+    async function() {
+
+
+        if (
+            !(
+                "Notification"
+                in window
+            )
+        ) {
+
+
+            alert(
+                "This browser does not support notifications."
+            );
+
+
+            return;
+
+        }
+
+
+
+        try {
+
+
+            let permission =
+                Notification.permission;
+
+
+
+            if (
+                permission !==
+                "granted"
+            ) {
+
+
+                permission =
+                    await Notification.requestPermission();
+
+
+            }
+
+
+
+            if (
+                permission ===
+                "granted"
+            ) {
+
+
+                const notification =
+
+                    new Notification(
+
+                        "🔔 MediReminder Test",
+
+                        {
+
+                            body:
+                                "Browser notifications are working!"
+
+                        }
+
+                    );
+
+
+
+                notification.onclick =
+                    function() {
+
+
+                        window.focus();
+
+
+                        notification.close();
+
+
+                    };
+
+
+            }
+
+            else {
+
+
+                alert(
+                    "Notification permission is not allowed."
+                );
+
+
+            }
+
+
+        }
+
+        catch (error) {
+
+
+            console.log(
+                "Notification error:",
+                error
+            );
+
+
+            alert(
+                "Could not show notification."
+            );
+
+
+        }
+
+
+    }
+);
+
+
+
+
+/* =========================================
+   MEDICINE REMINDER
+========================================= */
+
+
+function checkMedicineReminder() {
+
+
+    const medicines =
+        JSON.parse(
+            localStorage.getItem(
+                "medicines"
+            )
+        ) || [];
+
+
+
+    const now =
+        new Date();
+
+
+
+    const currentTime =
+
+        String(
+            now.getHours()
+        ).padStart(2, "0") +
+
+        ":" +
+
+        String(
+            now.getMinutes()
+        ).padStart(2, "0");
+
+
+
+    const today =
+        getToday();
+
+
+
+    medicines.forEach(
+        function(medicine) {
+
+
+            /* Check Date */
+
+
+            if (
+
+                today <
+                medicine.startDate ||
+
+                today >
+                medicine.endDate
+
+            ) {
+
+                return;
+
+            }
+
+
+
+            /* Check Time */
+
+
+            if (
+                medicine.time !==
+                currentTime
+            ) {
+
+                return;
+
+            }
+
+
+
+            /* Unique reminder key */
+
+
+            const reminderKey =
+
+                "reminder_" +
+
+                medicine.name +
+
+                "_" +
+
+                currentTime +
+
+                "_" +
+
+                today;
+
+
+
+            /* Prevent duplicate reminder */
+
+
+            if (
+                localStorage.getItem(
+                    reminderKey
+                ) === "shown"
+            ) {
+
+                return;
+
+            }
+
+
+
+            /* =================================
+               SHOW REMINDER BOX
+            ================================= */
+
+
+            document.getElementById(
+                "reminderBox"
+            ).style.display =
+                "block";
+
+
+
+            document.getElementById(
+                "reminderMessage"
+            ).innerHTML =
+
+
+                "Time to take <strong>" +
+
+                medicine.name +
+
+                "</strong><br><br>" +
+
+
+                "Dosage: <strong>" +
+
+                medicine.dosage +
+
+                "</strong><br>" +
+
+
+                "Scheduled Time: <strong>" +
+
+                medicine.time +
+
+                "</strong>";
+
+
+
+            /* =================================
+               START CONTINUOUS SOUND
+            ================================= */
+
+
+            startReminderSound();
+
+
+
+            /* =================================
+               BROWSER NOTIFICATION
+            ================================= */
+
+
+            if (
+
+                "Notification"
+                in window &&
+
+                Notification.permission ===
+                "granted"
+
+            ) {
+
+
+                try {
+
+
+                    const notification =
+
+                        new Notification(
+
+                            "🔔 Medicine Reminder",
+
+                            {
+
+                                body:
+
+                                    "Time to take " +
+
+                                    medicine.name +
+
+                                    " (" +
+
+                                    medicine.dosage +
+
+                                    ")"
+
+                            }
+
+                        );
+
+
+
+                    notification.onclick =
+                        function() {
+
+
+                            window.focus();
+
+
+                            notification.close();
+
+
+                        };
+
+
+                }
+
+                catch (error) {
+
+
+                    console.log(
+                        "Automatic notification error:",
+                        error
+                    );
+
+
+                }
+
+
+            }
+
+
+
+            /* Mark reminder as shown */
+
+
+            localStorage.setItem(
+
+                reminderKey,
+
+                "shown"
+
+            );
+
+
+        }
+    );
+
+}
+
+
+
+
+/* =========================================
+   TAKEN BUTTON
+========================================= */
+
+
+document.getElementById(
+    "takenButton"
+).addEventListener(
+    "click",
+    function() {
+
+
+        /* Stop beep */
+
+        stopReminderSound();
+
+
+
+        /* Hide reminder box */
+
+        document.getElementById(
+            "reminderBox"
+        ).style.display =
+            "none";
+
+
+    }
+);
+
+
+
+
+/* =========================================
+   START REMINDER CHECK
+========================================= */
+
+
+checkMedicineReminder();
+
+
+
+/* Check every second */
+
+setInterval(
+    checkMedicineReminder,
+    1000
+);
+
+
+
+/* Update next reminder every minute */
+
+setInterval(
+    updateNextReminder,
+    60000
+);
+
+
+</script>
+
+
+</body>
+
+</html>

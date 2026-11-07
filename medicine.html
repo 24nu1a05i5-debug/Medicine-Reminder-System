@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Medicines - MediReminder</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+
+    <style>
+
+        /* ==============================
+           MEDICINE PAGE
+        ============================== */
+
+        .medicine-page {
+
+            width: 90%;
+
+            max-width: 1200px;
+
+            margin: 40px auto;
+
+        }
+
+
+        .medicine-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .medicine-header h1 {
+
+            margin: 0;
+
+            color: #222;
+
+        }
+
+
+        .add-medicine-btn {
+
+            background: #087dcc;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+        }
+
+
+        .add-medicine-btn:hover {
+
+            background: #0569ad;
+
+        }
+
+
+        /* ==============================
+           TABLE CONTAINER
+        ============================== */
+
+        .table-container {
+
+            width: 100%;
+
+            overflow-x: auto;
+
+            background: white;
+
+            border-radius: 12px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+
+        }
+
+
+        /* ==============================
+           TABLE
+        ============================== */
+
+        .medicine-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 750px;
+
+        }
+
+
+        .medicine-table th {
+
+            background: #087dcc;
+
+            color: white;
+
+            padding: 15px 12px;
+
+            text-align: center;
+
+            font-size: 15px;
+
+        }
+
+
+        .medicine-table td {
+
+            padding: 14px 12px;
+
+            text-align: center;
+
+            border-bottom: 1px solid #ddd;
+
+            color: #333;
+
+            font-size: 14px;
+
+        }
+
+
+        .medicine-table tr:last-child td {
+
+            border-bottom: none;
+
+        }
+
+
+        .medicine-table tr:hover {
+
+            background: #f5faff;
+
+        }
+
+
+        /* ==============================
+           STATUS
+        ============================== */
+
+        .status-active {
+
+            color: #198754;
+
+            font-weight: bold;
+
+        }
+
+
+        /* ==============================
+           ACTION BUTTONS
+        ============================== */
+
+        .action-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 8px;
+
+        }
+
+
+        .edit-btn,
+        .delete-btn {
+
+            border: none;
+
+            padding: 8px 12px;
+
+            border-radius: 6px;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            white-space: nowrap;
+
+        }
+
+
+        .edit-btn {
+
+            background: #087dcc;
+
+        }
+
+
+        .edit-btn:hover {
+
+            background: #0569ad;
+
+        }
+
+
+        .delete-btn {
+
+            background: #dc3545;
+
+        }
+
+
+        .delete-btn:hover {
+
+            background: #b02a37;
+
+        }
+
+
+        /* ==============================
+           EMPTY MESSAGE
+        ============================== */
+
+        .empty-message {
+
+            text-align: center;
+
+            padding: 30px;
+
+            color: #777;
+
+            font-size: 16px;
+
+        }
+
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media (max-width: 700px) {
+
+            .medicine-page {
+
+                width: 95%;
+
+                margin: 25px auto;
+
+            }
+
+
+            .medicine-header {
+
+                flex-direction: column;
+
+                gap: 15px;
+
+                align-items: stretch;
+
+            }
+
+
+            .medicine-header h1 {
+
+                text-align: center;
+
+                font-size: 24px;
+
+            }
+
+
+            .add-medicine-btn {
+
+                text-align: center;
+
+            }
+
+
+            .medicine-table {
+
+                min-width: 700px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+
+<!-- ==============================
+     NAVIGATION
+============================== -->
+
+<header>
+
+    <nav class="navbar">
+
+        <h2 class="logo">
+            💊 MediReminder
+        </h2>
+
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="add-medicine.html">
+                    Add Medicine
+                </a>
+            </li>
+
+            <li>
+                <a href="medicine.html">
+                    Medicines
+                </a>
+            </li>
+
+            <li>
+                <a href="profile.html">
+                    Profile
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+</header>
+
+
+
+<!-- ==============================
+     MEDICINE CONTENT
+============================== -->
+
+<main class="medicine-page">
+
+
+    <div class="medicine-header">
+
+        <h1>
+            💊 My Medicines
+        </h1>
+
+
+        <a href="add-medicine.html"
+           class="add-medicine-btn">
+
+            ➕ Add Medicine
+
+        </a>
+
+    </div>
+
+
+
+    <!-- TABLE -->
+
+    <div class="table-container">
+
+        <table class="medicine-table">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>Medicine</th>
+
+                    <th>Dosage</th>
+
+                    <th>Time</th>
+
+                    <th>Frequency</th>
+
+                    <th>Status</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="medicineTableBody">
+
+            </tbody>
+
+
+        </table>
+
+    </div>
+
+
+</main>
+
+
+
+
+<script>
+
+
+/* =========================================
+   LOAD MEDICINES
+========================================= */
+
+function loadMedicines() {
+
+
+    const tableBody =
+        document.getElementById(
+            "medicineTableBody"
+        );
+
+
+    const medicines =
+        JSON.parse(
+            localStorage.getItem(
+                "medicines"
+            )
+        ) || [];
+
+
+    tableBody.innerHTML = "";
+
+
+
+    /* =====================================
+       NO MEDICINES
+    ===================================== */
+
+    if (medicines.length === 0) {
+
+        tableBody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="empty-message"
+                >
+
+                    💊 No medicines added yet.
+
+                    <br><br>
+
+                    Add your first medicine
+                    using the button above.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+
+    /* =====================================
+       DISPLAY MEDICINES
+    ===================================== */
+
+    medicines.forEach(
+        function(medicine, index) {
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+
+            /* Medicine */
+
+            const nameCell =
+                document.createElement(
+                    "td"
+                );
+
+            nameCell.textContent =
+                medicine.name;
+
+
+
+            /* Dosage */
+
+            const dosageCell =
+                document.createElement(
+                    "td"
+                );
+
+            dosageCell.textContent =
+                medicine.dosage;
+
+
+
+            /* Time */
+
+            const timeCell =
+                document.createElement(
+                    "td"
+                );
+
+            timeCell.textContent =
+                medicine.time;
+
+
+
+            /* Frequency */
+
+            const frequencyCell =
+                document.createElement(
+                    "td"
+                );
+
+            frequencyCell.textContent =
+                medicine.frequency;
+
+
+
+            /* Status */
+
+            const statusCell =
+                document.createElement(
+                    "td"
+                );
+
+            statusCell.textContent =
+                "Active";
+
+            statusCell.className =
+                "status-active";
+
+
+
+            /* Actions */
+
+            const actionsCell =
+                document.createElement(
+                    "td"
+                );
+
+
+            actionsCell.className =
+                "action-buttons";
+
+
+
+            /* =================================
+               EDIT BUTTON
+            ================================= */
+
+            const editButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            editButton.className =
+                "edit-btn";
+
+
+            editButton.textContent =
+                "✏️ Edit";
+
+
+            editButton.onclick =
+                function() {
+
+                    window.location.href =
+                        "add-medicine.html?edit=" +
+                        index;
+
+                };
+
+
+
+            /* =================================
+               DELETE BUTTON
+            ================================= */
+
+            const deleteButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            deleteButton.className =
+                "delete-btn";
+
+
+            deleteButton.textContent =
+                "🗑️ Delete";
+
+
+            deleteButton.onclick =
+                function() {
+
+
+                    const confirmDelete =
+                        confirm(
+
+                            "Are you sure you want to delete " +
+                            medicine.name +
+                            "?"
+
+                        );
+
+
+                    if (
+                        confirmDelete
+                    ) {
+
+
+                        medicines.splice(
+                            index,
+                            1
+                        );
+
+
+                        localStorage.setItem(
+
+                            "medicines",
+
+                            JSON.stringify(
+                                medicines
+                            )
+
+                        );
+
+
+                        loadMedicines();
+
+                    }
+
+                };
+
+
+
+            /* Add buttons */
+
+            actionsCell.appendChild(
+                editButton
+            );
+
+            actionsCell.appendChild(
+                deleteButton
+            );
+
+
+
+            /* Add cells */
+
+            row.appendChild(
+                nameCell
+            );
+
+            row.appendChild(
+                dosageCell
+            );
+
+            row.appendChild(
+                timeCell
+            );
+
+            row.appendChild(
+                frequencyCell
+            );
+
+            row.appendChild(
+                statusCell
+            );
+
+            row.appendChild(
+                actionsCell
+            );
+
+
+
+            tableBody.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+
+/* Load when page opens */
+
+loadMedicines();
+
+
+</script>
+
+
+</body>
+
+</html>
