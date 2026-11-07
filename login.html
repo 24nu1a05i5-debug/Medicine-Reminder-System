@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Login - Medicine Reminder System</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <div class="login-container">
+
         <div class="login-box">
 
             <h2>💊 MediReminder</h2>
@@ -16,59 +20,101 @@
 
             <form id="loginForm">
 
-                <input type="email" id="loginEmail"
-                       placeholder="Email Address" required>
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Email Address"
+                    required
+                >
 
-                <input type="password" id="loginPassword"
-                       placeholder="Password" required>
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Password"
+                    required
+                >
 
                 <button type="submit">Login</button>
 
             </form>
 
         </div>
+
     </div>
 
     <script>
+
     document.getElementById("loginForm").addEventListener("submit", function(event) {
 
         event.preventDefault();
 
+        // Get entered details
         const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+
         const password = document.getElementById("loginPassword").value;
 
-        const savedUser = localStorage.getItem("user");
+        // Get all registered users
+        let users = JSON.parse(localStorage.getItem("users")) || [];
 
-        if (!savedUser) {
-            alert("Invalid Login! Please register first.");
-            return;
+        // Support an account created using the older registration code
+        const oldUser = localStorage.getItem("user");
+
+        if (oldUser) {
+
+            try {
+
+                const previousUser = JSON.parse(oldUser);
+
+                if (previousUser.email) {
+
+                    const alreadyExists = users.some(function(u) {
+                        return u.email.toLowerCase() === previousUser.email.toLowerCase();
+                    });
+
+                    if (!alreadyExists) {
+                        users.push(previousUser);
+                        localStorage.setItem("users", JSON.stringify(users));
+                    }
+
+                }
+
+            } catch (error) {
+                console.log("Unable to read previous account.");
+            }
+
         }
 
-        let user;
+        // Check login credentials
+        const user = users.find(function(u) {
 
-        try {
-            user = JSON.parse(savedUser);
-        } catch (error) {
-            alert("Account data error. Please register again.");
-            return;
-        }
+            return u.email.toLowerCase() === email &&
+                   u.password === password;
 
-        if (email === user.email.trim().toLowerCase() &&
-            password === user.password) {
+        });
+
+        // Valid credentials
+        if (user) {
 
             localStorage.setItem("loggedIn", "true");
+
+            // Store current user's email
+            localStorage.setItem("currentUser", user.email.toLowerCase());
 
             alert("Valid Credentials! Login Successful.");
 
             window.location.href = "dashboard.html";
 
-        } else {
+        }
+
+        // Invalid credentials
+        else {
 
             alert("Invalid Credentials! Please check your email and password.");
 
         }
 
     });
+
     </script>
 
 </body>
